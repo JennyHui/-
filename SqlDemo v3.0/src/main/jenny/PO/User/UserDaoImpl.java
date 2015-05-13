@@ -3,16 +3,36 @@ package main.jenny.PO.User;
 import main.jenny.until.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
 
+import java.util.List;
+
 /**
  * Created by JennyHui on 2015/4/28
  */
 public class UserDaoImpl implements UserDao {
-	private final String findsql = "main.jenny.mapping.UserMapper.getUser";
-	private final String insertsql = "main.jenny.mapping.UserMapper.assUser";
-	private final String deletesql = "main.jenny.mapping.UserMapper.deleteUser";
-	private final String updatesql = "main.jenny.mapping.UserMapper.updateUser";
 
-	private final String findsql2 = "main.jenny.mapping.UserMapper.getUser2";
+	//匹配映射文件内对应的sql语句 - namespace.id
+	private final String findsql = "UserMapper.getUser";
+	private final String insertsql = "UserMapper.assUser";
+	private final String deletesql = "UserMapper.deleteUser";
+	private final String updatesql = "UserMapper.updateUser";
+	private final String getUserSQL = "UserMapper.getUsers";
+	private final String getUserNum = "UserMapper.getUserNum";
+
+
+	//执行sql语句，sql语句返回值 --> 映射至java对象
+	@Override
+	public User findUserByUsername(String username){
+		// 从会话工厂中得到会话
+		SqlSession sqlSession = MyBatisUtil.getSqlSession("DB1",true);
+		// 通过sqlSession操作数据库
+		// 第一个参数：user.xml定义的statement的id
+		// 第二个参数：输入参数
+		User user = sqlSession.selectOne(findsql,username);
+		//System.out.println(user);
+		// 释放资源
+		sqlSession.close();
+		return user;
+	}
 
 	@Override
 	public User insertUser(int id,String username,int age){
@@ -21,7 +41,7 @@ public class UserDaoImpl implements UserDao {
 		user.setId(id);
 		user.setUsername(username);
 		user.setAge(age);
-		sqlSession.insert(insertsql,user);
+		sqlSession.insert(insertsql, user);
 		sqlSession.close();
 		return user;
 	}
@@ -50,13 +70,9 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public User findUserByUsername(String username){
-		// 从会话工厂中得到会话
+	public List<User> getUsers(){
 		SqlSession sqlSession = MyBatisUtil.getSqlSession("DB1",true);
-		// 通过sqlSession操作数据库
-		// 第一个参数：user.xml定义的statement的id
-		// 第二个参数：输入参数
-		User user = sqlSession.selectOne(findsql,username);
+		List<User> user = sqlSession.selectList(getUserSQL);
 		//System.out.println(user);
 		// 释放资源
 		sqlSession.close();
@@ -64,15 +80,9 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public User findUserByUsername2(String name){
-		// 从会话工厂中得到会话
-		SqlSession sqlSession = MyBatisUtil.getSqlSession("DB2",true);
-		// 通过sqlSession操作数据库
-		// 第一个参数：user.xml定义的statement的id
-		// 第二个参数：输入参数
-		User user = sqlSession.selectOne(findsql2,name);
-		//System.out.println(user);
-		// 释放资源
+	public User selectUserNumByUsername(String username){
+		SqlSession sqlSession = MyBatisUtil.getSqlSession("DB1",true);
+		User user = sqlSession.selectOne(getUserNum,username);
 		sqlSession.close();
 		return user;
 	}

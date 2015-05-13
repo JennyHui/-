@@ -27,13 +27,25 @@ public class UserTest {
 	// 测试更新用户信息方法
 	@Test
 	public void testUpdateUser(){
-		userDao.updateUser(11, "AndyOn", 18 );
+		userDao.updateUser(11, "AndyOn", 18);
 	}
 
 	// 测试查询用户信息方法
 	@Test
 	public void testFindUserByUsername() {
 		System.out.println(userDao.findUserByUsername("JennyHui").getAge());
+	}
+
+	//sql查询结果映射到list中，脚本调用再自行处理
+	@Test
+	public void testgetUsers() {
+		System.out.println(userDao.getUsers().get(1).toString());
+	}
+
+	//sql查询结果映射到list中，脚本调用再自行处理
+	@Test
+	public void testgetUserNum() {
+		System.out.println(userDao.selectUserNumByUsername("JennyHui").getNum());
 	}
 
 

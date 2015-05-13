@@ -6,6 +6,7 @@ package main.jenny.PO.User;
 public class User {
 	private int id;
 	private int age;
+	private int number;
 	private String username;
 
 	public int getId() {
@@ -25,6 +26,15 @@ public class User {
 	}
 	public void setAge(int age){
 		this.age = age;
+	}
+	public int getNum(){
+		return number;
+	}
+
+	@Override
+	public String toString(){
+		String sqlString =  "id: "+this.id+" username: "+this.username+" age: "+this.age;
+		return sqlString;
 	}
 }
 
